@@ -2,9 +2,16 @@ import datetime
 import sqlalchemy
 from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 class User(SqlAlchemyBase):
+
+    def set_password(self, password):
+        self.hashed_password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.hashed_password, password)
 
     __tablename__ = 'users'
 
